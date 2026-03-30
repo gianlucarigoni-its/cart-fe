@@ -1,6 +1,6 @@
 import { CartItem } from "./cart-item.entity";
 
-export function getVat(countryCode: string) {
+export function getVat(countryCode: string): number {
     if (countryCode === 'IT') {
         return 0.22;
     }

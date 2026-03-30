@@ -4,7 +4,10 @@
     <ul class="list-group" id="items-list">
       @for (item of items; track item.id) {
         <li class="list-group-item item">
-          <app-cart-item [item]="item" (quantityChange)="updateItemQuantity(item, $event)"/>
+          <app-cart-item
+            [vat]="vat()"
+            [item]="item"
+            (quantityChange)="updateItemQuantity(item, $event)"/>
         </li>
       }
     </ul>
@@ -13,7 +16,7 @@
   <div class="mt-5">
     <h3>Totale ordine</h3>
     <div class="order-summary">
-      <app-summary [items]="items"/>
+      <app-summary [items]="items" [vat]="vat()"/>
     </div>
   </div>
 </div>

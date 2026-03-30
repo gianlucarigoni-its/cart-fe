@@ -16,7 +16,7 @@ export class SummaryComponent {
     return this.getSummary();
   })
 
-  getSummary() {
+  private getSummary() {
     const calcList = this.items().map(item => calcCartItem(item, this.vat()));
 
     const netPrice = calcList.reduce((total, item) => {
