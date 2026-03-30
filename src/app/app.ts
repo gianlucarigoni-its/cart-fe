@@ -1,10 +1,11 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { cart } from './cart-data';
 import { CartItem } from './cart-item.entity';
 import { FormsModule } from '@angular/forms';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
 import { SummaryComponent } from './components/summary/summary.component';
 import { getVat } from './cart-utils';
+import { DEFAULT_COUNTRY_CODE } from './app.config';
 
 @Component({
   selector: 'app-root',
@@ -18,8 +19,8 @@ import { getVat } from './cart-utils';
 })
 export class App {
   items = cart;
-
-  private countryCode = signal<string>('IT');
+  private defaultCountryCode = inject<string>(DEFAULT_COUNTRY_CODE);
+  private countryCode = signal<string>(this.defaultCountryCode);
 
   vat = computed(() => {
     return getVat(this.countryCode());
