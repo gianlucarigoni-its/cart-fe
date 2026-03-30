@@ -2,10 +2,11 @@ import { Component, computed, input, output } from '@angular/core';
 import { CartItem } from '../../cart-item.entity';
 import { calcCartItem } from '../../cart-utils';
 import { FormsModule } from '@angular/forms';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-cart-item',
-  imports: [FormsModule],
+  imports: [FormsModule, CurrencyPipe],
   templateUrl: './cart-item.component.html',
   styleUrl: './cart-item.component.css',
 })

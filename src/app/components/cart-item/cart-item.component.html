@@ -14,8 +14,8 @@
         style="width: 70px">
     </span>
     <span class="ms-2">
-      <span class="item-price">{{ price() }}</span>
-      <span class="item-discount">(-{{ discountAmount() }})</span>
+      <span class="item-price">{{ price() | currency }}</span>&nbsp;
+      <span class="item-discount">(-{{ discountAmount() | currency }})</span>
     </span>
   </div>
 </div>
