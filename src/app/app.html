@@ -3,12 +3,14 @@
     <h3>I tuoi articoli</h3>
     <ul class="list-group" id="items-list">
       @for (item of items(); track item.id) {
-        <li class="list-group-item item">
-          <app-cart-item
-            [vat]="vat()"
-            [item]="item"
-            (quantityChange)="updateItemQuantity(item, $event)"/>
-        </li>
+        @if(item.quantity > 0){
+          <li class="list-group-item item">
+            <app-cart-item
+              [vat]="vat()"
+              [item]="item"
+              (quantityChange)="updateItemQuantity(item, $event)"/>
+          </li>
+        }
       }
     </ul>
   </div>

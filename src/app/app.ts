@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
 import { SummaryComponent } from './components/summary/summary.component';
 import { getVat } from './cart-utils';
-import { DEFAULT_COUNTRY_CODE } from './app.config';
+
 import { CartSourceService } from './services/cart-source.service';
+import { VatSourceService } from './services/vat-source.service';
 
 @Component({
   selector: 'app-root',
@@ -19,14 +20,14 @@ import { CartSourceService } from './services/cart-source.service';
 })
 export class App {
   protected cartSrv = inject(CartSourceService);
+  protected vatSvr = inject(VatSourceService);
 
   items = this.cartSrv.cart;
-  private defaultCountryCode = inject<string>(DEFAULT_COUNTRY_CODE);
-  private countryCode = signal<string>(this.defaultCountryCode);
-
+  countryCode = this.vatSvr.countryCode;
+  
   vat = computed(() => {
     return getVat(this.countryCode());
-  });
+  })
 
   updateItemQuantity(item: CartItem, newQuantity: number) {
     this.cartSrv.setQuantity(item, newQuantity);
