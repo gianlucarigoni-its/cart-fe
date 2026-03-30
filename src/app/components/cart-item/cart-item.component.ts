@@ -1,4 +1,4 @@
-import { Component, Input, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CartItem } from '../../cart-item.entity';
 import { calcCartItem } from '../../cart-utils';
 import { FormsModule } from '@angular/forms';
