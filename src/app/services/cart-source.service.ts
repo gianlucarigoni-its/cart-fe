@@ -1,6 +1,7 @@
 
+import { HttpClient } from '@angular/common/http';
 import { CartItem } from './../cart-item.entity';
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 
 const cart: CartItem[] = [
   {
@@ -96,29 +97,49 @@ const cart: CartItem[] = [
   providedIn: 'root',
 })
 export class CartSourceService {
+  private http = inject(HttpClient);
+  
   private internal = signal<CartItem[]>(cart);
   cart = this.internal.asReadonly();
+
+  constructor(){
+    this.fetch();
+  }
+
+  fetch() {
+    this.http.get<CartItem[]>('api/cart-items').subscribe(items => {
+      this.internal.set(items)
+    })
+  }
 
   setQuantity(id: string, newQuantity: number): void {
     if (newQuantity < 0) {
       newQuantity = 0;
     }
-    const index = this.internal().findIndex(item => item.id === id);
-    if (index === -1) {
-      throw new Error(`Missing item with id ${id}`);
-    }
-    const clone = structuredClone(this.internal());
-    clone[index].quantity = newQuantity;
-    this.internal.set(clone);
+
+    this.http.put<CartItem>(`api/cart-items/${id}`, { quantity: newQuantity })
+    .subscribe(updated => {
+      const index = this.internal().findIndex(item => item.id === id);
+
+      if (index === -1) {
+        throw new Error(`Missing item with id ${id}`);
+      }
+
+      const clone = structuredClone(this.internal());
+      clone[index] = updated;
+      this.internal.set(clone);
+    })
   }
 
   removeItem(id: string): void {
-    const index = this.internal().findIndex(item => item.id === id);
-    if (index === -1) {
-      throw new Error(`Missing item with id ${id}`);
-    }
-    const clone = structuredClone(this.internal());
-    clone.splice(index, 1);
-    this.internal.set(clone);
+    this.http.delete<CartItem>(`api/cart-items/${id}`).subscribe(() => {
+      const index = this.internal().findIndex(item => item.id === id);
+      if (index === -1) {
+        throw new Error(`Missing item with id ${id}`);
+      }
+      const clone = structuredClone(this.internal());
+      clone.splice(index, 1);
+      this.internal.set(clone);
+    })
   }
 }
