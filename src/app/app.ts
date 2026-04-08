@@ -19,6 +19,16 @@ import { VatSourceService } from './services/vat-source.service';
   ]
 })
 export class App {
+
+  prhase = "porco-dio"
+  farse = setInterval(() => {
+      if(this.prhase == "porco-dio")
+        this.prhase = "porca-madonna"
+      else
+        this.prhase = "porco-dio"
+    }, 1000);
+    
+
   protected cartSrv = inject(CartSourceService);
   protected vatSvr = inject(VatSourceService);
 
