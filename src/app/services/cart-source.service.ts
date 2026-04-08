@@ -1,3 +1,4 @@
+
 import { CartItem } from './../cart-item.entity';
 import { Injectable, signal } from '@angular/core';
 
@@ -98,10 +99,26 @@ export class CartSourceService {
   private internal = signal<CartItem[]>(cart);
   cart = this.internal.asReadonly();
 
-  setQuantity(item: CartItem, newQuantity: number) {
-    const index = this.internal().indexOf(item);
+  setQuantity(id: string, newQuantity: number): void {
+    if (newQuantity < 0) {
+      newQuantity = 0;
+    }
+    const index = this.internal().findIndex(item => item.id === id);
+    if (index === -1) {
+      throw new Error(`Missing item with id ${id}`);
+    }
     const clone = structuredClone(this.internal());
     clone[index].quantity = newQuantity;
+    this.internal.set(clone);
+  }
+
+  removeItem(id: string): void {
+    const index = this.internal().findIndex(item => item.id === id);
+    if (index === -1) {
+      throw new Error(`Missing item with id ${id}`);
+    }
+    const clone = structuredClone(this.internal());
+    clone.splice(index, 1);
     this.internal.set(clone);
   }
 }

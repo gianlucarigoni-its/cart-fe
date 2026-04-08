@@ -1,13 +1,21 @@
-import { inject, Injectable, signal, computed } from '@angular/core';
-import { DEFAULT_COUNTRY_CODE } from './../app.config';
 
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { getVat } from '../cart-utils';
+import { DEFAULT_COUNTRY_CODE } from '../app.config';
 
 @Injectable({
   providedIn: 'root',
 })
-export class VatSourceService {
+export class VatService {
   private defaultCountryCode = inject<string>(DEFAULT_COUNTRY_CODE);
-  private vat = signal<string>(this.defaultCountryCode);
-  
-  countryCode = this.vat.asReadonly();
+
+  private countryCode = signal<string>(this.defaultCountryCode);
+
+  vat = computed(() => {
+    return getVat(this.countryCode());
+  });
+
+  setCountry(countryCode: string) {
+    this.countryCode.set(countryCode);
+  }
 }

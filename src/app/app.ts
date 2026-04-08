@@ -1,12 +1,11 @@
-import { Component, computed, inject, signal } from '@angular/core';
+
+import { Component, inject } from '@angular/core';
 import { CartItem } from './cart-item.entity';
 import { FormsModule } from '@angular/forms';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
 import { SummaryComponent } from './components/summary/summary.component';
-import { getVat } from './cart-utils';
-
 import { CartSourceService } from './services/cart-source.service';
-import { VatSourceService } from './services/vat-source.service';
+import { VatService } from './services/vat-source.service';
 
 @Component({
   selector: 'app-root',
@@ -19,27 +18,20 @@ import { VatSourceService } from './services/vat-source.service';
   ]
 })
 export class App {
-
-  prhase = "porco-dio"
-  farse = setInterval(() => {
-      if(this.prhase == "porco-dio")
-        this.prhase = "porca-madonna"
-      else
-        this.prhase = "porco-dio"
-    }, 1000);
-    
-
   protected cartSrv = inject(CartSourceService);
-  protected vatSvr = inject(VatSourceService);
+  protected vatSrv = inject(VatService);
 
   items = this.cartSrv.cart;
-  countryCode = this.vatSvr.countryCode;
-  
-  vat = computed(() => {
-    return getVat(this.countryCode());
-  })
+  vat = this.vatSrv.vat;
 
   updateItemQuantity(item: CartItem, newQuantity: number) {
-    this.cartSrv.setQuantity(item, newQuantity);
+    if (newQuantity === null) {
+      return;
+    }
+    if (newQuantity > 0) {
+      this.cartSrv.setQuantity(item.id, newQuantity);
+    } else {
+      this.cartSrv.removeItem(item.id);
+    }
   }
 }
