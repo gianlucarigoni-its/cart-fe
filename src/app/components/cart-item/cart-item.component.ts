@@ -1,11 +1,11 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, computed, effect, input, output } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 import { CartItem } from '../../cart-item.entity';
 import { calcCartItem } from '../../cart-utils';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CurrencyPipe } from '@angular/common';
 import { DiscountAmountPipe } from '../../pipes/discount-amount.pipe';
-import { debounceTime, Subject, Subscription, takeUntil } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-cart-item',
