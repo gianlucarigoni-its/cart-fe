@@ -3,7 +3,7 @@
   
   <div class="d-flex flex-column gap-2">
     @for(item of items(); track item.id){
-      <app-cart-item-card [item]="item"></app-cart-item-card>
+      <app-cart-item-card [item]="item" (toRemove)="toRemove($event)"></app-cart-item-card>
     }
     @empty {
       <p class="text-muted">Il carrello è vuoto</p>

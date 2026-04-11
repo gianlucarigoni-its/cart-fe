@@ -36,4 +36,13 @@ export class ProductListComponent {
       this.cart.set(items);
     })
   }
+
+  addToCart(event: {productId: string, quantity: number}) {
+  this.http.post('api/cart-items', {
+    productId: event.productId,
+    quantity: event.quantity
+  }).subscribe(() => {
+    this.getCartList();
+  });
+}
 }

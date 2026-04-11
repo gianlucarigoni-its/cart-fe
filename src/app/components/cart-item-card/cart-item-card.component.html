@@ -1,12 +1,14 @@
 <div class="card mt-2">
   <div class="card-body">
     <h5 class="card-title"> {{calcItem().product.name}} </h5>
-    <h6 class="card-subtitle mb-2 text-muted">Prezzo: {{calcItem().product.netPrice*vat() | currency}} </h6>
+    <h6 class="card-subtitle mb-2 text-muted">Prezzo: {{calcItem().product.netPrice | currency}} </h6>
+    <h6 class="card-subtitle mb-2 text-muted">IVA: {{ calcItem().totalPrice/calcItem().quantity*vat() | currency}} </h6>
     <h6 class="card-subtitle mb-2 text-muted">Quantità: {{ calcItem().quantity }} </h6>
-    <p class="card-text">Prezzo Totale: {{calcItem().totalNetPrice | currency }} </p>
+    <h6 class="card-subtitle mb-2 text-muted">Sconto: {{ calcItem().product.discount*100 }}% </h6>
+    <p class="card-text">Prezzo Totale: {{calcItem().totalPrice | currency }} </p>
     <a href="#" class="btn btn-link">details</a>
   </div>
   <div class="card-footer text-muted text-end">
-    <button class="btn btn-link">Remove</button>
+    <button class="btn btn-link" (click)="onRemove()">Remove</button>
   </div>
 </div>
