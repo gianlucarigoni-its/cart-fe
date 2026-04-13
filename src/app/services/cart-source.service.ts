@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { CartItem } from './../cart-item.entity';
+import { CartItem } from '../cart-item.entity';
 import { inject, Injectable, signal } from '@angular/core';
 
 

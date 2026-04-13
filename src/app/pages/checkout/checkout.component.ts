@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { CartItemComponent } from '../../components/cart-item/cart-item.component';
 import { SummaryComponent } from '../../components/summary/summary.component';
 import { CartItem } from '../../cart-item.entity';
-import { CartSourceService } from '../../services/cart.service';
-import { VatService } from '../../services/vat.service';
+import { CartSourceService } from '../../services/cart-source.service';
+import { VatSourceService } from '../../services/vat-source.service';
 
 @Component({
   selector: 'app-checkout',
@@ -18,7 +18,7 @@ import { VatService } from '../../services/vat.service';
 })
 export class CheckoutComponent {
   protected cartSrv = inject(CartSourceService);
-  protected vatSrv = inject(VatService);
+  protected vatSrv = inject(VatSourceService);
 
   items = this.cartSrv.cart;
   vat = this.vatSrv.vat;

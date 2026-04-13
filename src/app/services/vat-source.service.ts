@@ -6,7 +6,7 @@ import { DEFAULT_COUNTRY_CODE } from '../app.config';
 @Injectable({
   providedIn: 'root',
 })
-export class VatService {
+export class VatSourceService {
   private defaultCountryCode = inject<string>(DEFAULT_COUNTRY_CODE);
 
   private countryCode = signal<string>(this.defaultCountryCode);

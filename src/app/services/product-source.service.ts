@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Product } from './../product.entity';
 import { inject, Injectable, signal } from '@angular/core';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductService {
+export class ProductSourceService {
     private http = inject(HttpClient);
   
     private internal = signal<Product[]>([]);
@@ -22,5 +23,7 @@ export class ProductService {
       })
     }
 
-    
+    getProduct(id: string) :Observable<Product>{
+        return this.http.get<Product>(`/api/products/${id}`)
+    }
 }

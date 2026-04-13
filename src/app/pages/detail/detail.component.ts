@@ -1,7 +1,8 @@
 import { Component, input, computed, signal, inject, effect} from '@angular/core';
 import { Product } from '../../product.entity';
-import { HttpClient } from '@angular/common/http';
 import { CurrencyPipe } from '@angular/common';
+import { VatSourceService } from '../../services/vat-source.service';
+import { ProductSourceService } from '../../services/product-source.service';
 
 @Component({
   selector: 'app-detail',
@@ -10,19 +11,19 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './detail.component.css',
 })
 export class DetailComponent {
-  private http = inject(HttpClient)
-  id = input.required<string>()
+  protected vatSrv = inject(VatSourceService);
+  protected ProductSrv = inject(ProductSourceService);
+  id = input.required<string>();
   product = signal<Product | undefined>(undefined);
-  vat = input<number>(0.22);
+  vat = this.vatSrv.vat;
 
   constructor(){
     effect(() => this.getProduct());
   }
 
   getProduct(){
-    console.log(this.id());
-    this.http.get<Product>(`/api/products/${this.id()}`).subscribe(p => {
-      this.product.set(p);
+    this.ProductSrv.getProduct(this.id()).subscribe(i => {
+      this.product.set(i);
     })
   }
 
