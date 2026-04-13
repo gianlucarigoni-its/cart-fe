@@ -1,0 +1,17 @@
+<div class="container mt-4">
+
+  <h2 class="mb-1">{{this.product()?.name}}</h2>
+
+  <div class="d-flex align-items-center gap-3 mt-2 mb-3">
+    <h3 class="text-danger mb-0">{{this.getPrice() | currency}}</h3>
+    <span class="badge bg-danger">-{{(this.product()?.discount ?? 0) * 100}}%</span>
+  </div>
+
+  <p class="lead">Desczrizione:<br>{{this.product()?.description}}</p>
+
+  <div class="d-flex align-items-center gap-3 mt-4">
+    <input type="number" class="product-card-quantity form-control w-auto">
+    <button class="btn btn-primary">Add</button>
+  </div>
+
+</div>

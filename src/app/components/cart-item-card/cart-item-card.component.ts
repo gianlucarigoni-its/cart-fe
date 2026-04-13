@@ -2,10 +2,11 @@ import { Component, input, computed, output} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { CartItem } from '../../cart-item.entity';
 import { calcCartItem } from '../../cart-utils';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-cart-item-card',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './cart-item-card.component.html',
   styleUrl: './cart-item-card.component.css',
 })
