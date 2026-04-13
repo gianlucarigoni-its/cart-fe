@@ -52,4 +52,13 @@ export class CartSourceService {
       this.internal.set(clone);
     })
   }
+
+  addItem(id: string, quantity: number): void{
+    this.http.post<CartItem>(`/api/cart-items`, {
+      productId: id,
+      quantity: quantity
+    }).subscribe(newItem => {
+      this.internal.set([...this.internal(), newItem]);
+    });
+  }
 }
