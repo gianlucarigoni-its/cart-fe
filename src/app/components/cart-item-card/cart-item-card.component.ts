@@ -1,7 +1,7 @@
 import { Component, input, computed, output, inject} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { CartItem } from '../../cart-item.entity';
-import { calcCartItem } from '../../cart-utils';
+import { calcCartItem, getVat, getVatPrice } from '../../cart-utils';
 import { RouterLink } from "@angular/router";
 import { VatSourceService } from '../../services/vat-source.service';
 

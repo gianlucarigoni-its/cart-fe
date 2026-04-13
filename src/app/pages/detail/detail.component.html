@@ -1,17 +1,23 @@
-<div class="container mt-4">
+<div class="container-fluid mt-5 row">
+  <div class="col">
+    <h2 class="mb-1">{{this.product()?.name}}</h2>
 
-  <h2 class="mb-1">{{this.product()?.name}}</h2>
+    <div class="d-flex align-items-center gap-3 mt-2 mb-3">
+      <h4 class="text-muted text-decoration-line-through mb-0">{{ originalPrice() | currency}}</h4><br>
+      <h3 class="text-danger mb-0">{{finalPrice() | currency}}</h3>
+      <span class="badge bg-danger">-{{(this.product()?.discount ?? 0) * 100}}%</span>
+    </div>
 
-  <div class="d-flex align-items-center gap-3 mt-2 mb-3">
-    <h3 class="text-danger mb-0">{{this.getPrice() | currency}}</h3>
-    <span class="badge bg-danger">-{{(this.product()?.discount ?? 0) * 100}}%</span>
+    <p class="lead">Desczrizione:<br>{{this.product()?.description}}</p>
+
+    <div class="d-flex align-items-center gap-3 mt-4">
+      <input type="number" [(ngModel)]="quantity" class="product-card-quantity">
+      <button class="btn btn-link" (click)="addToCart()">Add</button>
+    </div>
   </div>
 
-  <p class="lead">Desczrizione:<br>{{this.product()?.description}}</p>
-
-  <div class="d-flex align-items-center gap-3 mt-4">
-    <input type="number" class="product-card-quantity form-control w-auto">
-    <button class="btn btn-primary">Add</button>
+  <div class="col side-cart">
+    <app-side-cart></app-side-cart>
   </div>
 
 </div>

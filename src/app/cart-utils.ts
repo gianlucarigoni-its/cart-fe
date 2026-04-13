@@ -8,7 +8,7 @@ export function getVat(countryCode: string): number {
 }
 
 export function getDiscountedPrice(price: number, discount: number) {
-    return price * (1 - discount/100);
+    return price * (1 - discount);
 }
 
 export function getVatPrice(price: number, vat: number) {

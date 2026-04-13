@@ -3,31 +3,42 @@ import { Product } from '../../product.entity';
 import { CurrencyPipe } from '@angular/common';
 import { VatSourceService } from '../../services/vat-source.service';
 import { ProductSourceService } from '../../services/product-source.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { SideCartComponent } from '../../components/side-cart/side-cart.component';
+import { switchMap } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { CartSourceService } from '../../services/cart-source.service';
+
 
 @Component({
   selector: 'app-detail',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, SideCartComponent, FormsModule],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.css',
 })
 export class DetailComponent {
   protected vatSrv = inject(VatSourceService);
   protected ProductSrv = inject(ProductSourceService);
+  protected CartSvr = inject(CartSourceService);
   id = input.required<string>();
-  product = signal<Product | undefined>(undefined);
   vat = this.vatSrv.vat;
+  quantity = signal(1);
 
-  constructor(){
-    effect(() => this.getProduct());
-  }
+  product = toSignal(
+    toObservable(this.id).pipe(
+      switchMap(id => this.ProductSrv.getProduct(id))
+    )
+  );
 
-  getProduct(){
-    this.ProductSrv.getProduct(this.id()).subscribe(i => {
-      this.product.set(i);
-    })
-  }
+  originalPrice = computed(() => 
+    (this.product()?.netPrice ?? 0) * (1 + this.vat())
+  )
 
-  getPrice(){
-    return (this.product()?.netPrice ?? 0) * 100
+  finalPrice = computed(() =>
+    ((this.product()?.netPrice ?? 0) * (1 - (this.product()?.discount ?? 0))) * (1 + this.vat())
+  );
+
+  addToCart(){
+    this.CartSvr.addItem(this.id(), this.quantity());
   }
 }

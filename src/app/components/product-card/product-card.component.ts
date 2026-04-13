@@ -17,7 +17,7 @@ export class ProductCardComponent {
   addToCart = output<{productId: string, quantity: number}>()
 
   price = computed(() => {
-    return this.product().netPrice * this.vat();
+    return this.product().netPrice;
   })
 
   onAdd(){
