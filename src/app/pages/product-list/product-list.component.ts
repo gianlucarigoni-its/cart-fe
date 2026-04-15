@@ -1,39 +1,53 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { debounceTime, startWith, Subject, switchMap } from 'rxjs';
-import { ProductCardComponent } from '../../components/product-card/product-card.component';
-import { ProductFilterComponent, ProductFilterEvent } from '../../components/product-filter/product-filter.component';
-import { SideCartComponent } from '../../components/side-cart/side-cart.component';
-import { CartSourceService } from '../../services/cart-source.service';
 import { ProductFilter, ProductSourceService } from '../../services/product-source.service';
+import { ProductCardComponent } from "../../components/product-card/product-card.component";
 import { VatSourceService } from '../../services/vat-source.service';
+import { CartSourceService } from '../../services/cart-source.service';
+import { AsyncPipe } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { debounceTime, filter, from, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
+import { ProductFilterComponent, ProductFilterEvent } from '../../components/product-filter/product-filter.component';
+import { SideCartComponent } from "../../components/side-cart/side-cart.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
-  imports: [ ProductCardComponent, SideCartComponent, AsyncPipe, ProductFilterComponent],
+  imports: [
+    ProductCardComponent,
+    AsyncPipe,
+    ReactiveFormsModule,
+    ProductFilterComponent,
+    SideCartComponent
+],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
 })
 export class ProductListComponent {
-  protected cartSrv = inject(CartSourceService)
+  protected productSrv = inject(ProductSourceService);
+  protected cartSrv = inject(CartSourceService);
   protected vatSrv = inject(VatSourceService);
-  protected productSvr = inject(ProductSourceService);
+  protected router = inject(Router);
+
   protected filters$ = new Subject<ProductFilter>();
 
   vat = this.vatSrv.vat;
 
-  products = this.filters$
-                  .pipe(
-                    startWith({}),
-                    debounceTime(250),
-                    switchMap(filter => this.productSvr.find(filter))
-                  );
+  products$ = this.filters$
+                .pipe(
+                  startWith({}),
+                  debounceTime(250),
+                  switchMap(filter => this.productSrv.find(filter))
+                );
 
-  setFilters(filters: ProductFilterEvent){
+  add(id: string, quantity: number) {
+    this.cartSrv.addItem(id, quantity);
+  }
+
+  setFilters(filters: ProductFilterEvent) {
     this.filters$.next(filters);
   }
 
-  addToCart(event: {productId: string, quantity: number}) {
-    this.cartSrv.addItem(event.productId, event.quantity)
+  navigateToDetail(id: string) {
+    this.router.navigate(['/products', id]);
   }
 }

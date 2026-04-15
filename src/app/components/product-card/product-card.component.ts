@@ -1,26 +1,39 @@
-import { CurrencyPipe } from '@angular/common';
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { Product } from '../../product.entity';
+import { getDiscountedPrice, getVatPrice } from '../../cart-utils';
+import { CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-product-card',
-  imports: [FormsModule, CurrencyPipe, RouterLink],
+  imports: [
+    CurrencyPipe,
+    FormsModule
+  ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
 })
 export class ProductCardComponent {
   product = input.required<Product>();
-  vat = input<number>(0.22);
-  quantity = signal(1);
-  addToCart = output<{productId: string, quantity: number}>()
+  vat = input<number>(0);
+
+  onAdd = output<number>();
+  onDetail = output<void>();
+
+  quantity: number = 1;
 
   price = computed(() => {
-    return this.product().netPrice;
-  })
+    const product = this.product();
+    let p = getVatPrice(product.netPrice, this.vat());
+    p = getDiscountedPrice(p, product.discount);
+    return p;
+  });
 
-  onAdd(){
-    this.addToCart.emit({productId: this.product().id, quantity: this.quantity()})
+  add() {
+    this.onAdd.emit(this.quantity);
+  }
+
+  goToDetail() {
+    this.onDetail.emit();
   }
 }

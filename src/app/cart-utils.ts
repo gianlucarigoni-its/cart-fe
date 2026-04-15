@@ -30,7 +30,7 @@ export function calcCartItem(item: CartItem, vat: number) {
         totalWeight: item.product.weight * item.quantity,
         totalPrice,
         totalNetPrice,
-        discountAmount: totalPrice * item.product.discount/100
+        discountAmount: item.product.netPrice * ( 1 + vat) * item.product.discount
     }
 }
 

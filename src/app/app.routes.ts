@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { CheckoutComponent } from './pages/checkout/checkout.component'
+import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { ProductListComponent } from './pages/product-list/product-list.component';
-import { DetailComponent } from './pages/detail/detail.component';
+import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 
 export const routes: Routes = [
   {
@@ -13,7 +13,12 @@ export const routes: Routes = [
     component: ProductListComponent
   },
   {
-    path: 'detail/:id',
-    component: DetailComponent
+    path: 'products/:id',
+    component: ProductDetailComponent
+  },
+  {
+    path: '',
+    redirectTo: '/products',
+    pathMatch: 'full'
   }
 ];

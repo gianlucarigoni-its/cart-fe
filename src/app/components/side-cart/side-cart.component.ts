@@ -1,30 +1,39 @@
-import { Component, inject } from '@angular/core';
-import { CartItemCardComponent } from '../cart-item-card/cart-item-card.component';
+import { Component, computed, inject } from '@angular/core';
 import { CartSourceService } from '../../services/cart-source.service';
 import { VatSourceService } from '../../services/vat-source.service';
+import { calcCartItem, getTransportFee } from '../../cart-utils';
 import { CurrencyPipe } from '@angular/common';
-import { calcCartItem } from '../../cart-utils';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-side-cart',
-  imports: [CartItemCardComponent, CurrencyPipe],
+  imports: [
+    CurrencyPipe,
+    RouterLink
+  ],
   templateUrl: './side-cart.component.html',
   styleUrl: './side-cart.component.css',
 })
 export class SideCartComponent {
-  protected cartSrv = inject(CartSourceService);
-  protected vatSrv = inject(VatSourceService)
+  cartSrv = inject(CartSourceService);
+  vatSrv = inject(VatSourceService);
 
-  cart = this.cartSrv.cart;
+  source = this.cartSrv.cart;
   vat = this.vatSrv.vat;
 
-  getTotalCartPrice(){
-    return this.cart().reduce((total, item) => {
-      return total + calcCartItem(item, this.vat()).totalNetPrice;
-    }, 0)
-  }
+  items = computed(() => {
+    return this.source().map(item => calcCartItem(item, this.vat()));
+  });
 
-  toRemove(event: string){
-    this.cartSrv.removeItem(event)
+  total = computed(() => {
+    const totalPrice = this.items().reduce((total, item) => total + item.totalPrice, 0)
+    const discountAmount = this.items().reduce((tot, item) => tot + item.discountAmount, 0)
+    const totalWeight = this.items().reduce((tot, curr) => tot + curr.totalWeight, 0);
+    const transportFee = getTransportFee(totalWeight);
+    return totalPrice + transportFee ;
+  });
+
+  removeItem(id: string) {
+    this.cartSrv.removeItem(id);
   }
 }
