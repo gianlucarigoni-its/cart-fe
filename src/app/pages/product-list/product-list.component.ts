@@ -17,7 +17,6 @@ import { Router } from '@angular/router';
     AsyncPipe,
     ReactiveFormsModule,
     ProductFilterComponent,
-    SideCartComponent
 ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',

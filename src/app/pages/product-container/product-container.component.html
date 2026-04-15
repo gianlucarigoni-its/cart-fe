@@ -1,1 +1,12 @@
-<p>product-container works!</p>
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="col">
+      <app-product-list />
+    </div>
+    @if(cart().length){
+      <div class="col side-cart">
+        <app-side-cart />
+      </div>
+    }
+  </div>
+</div>
