@@ -25,7 +25,7 @@ export class ProductDetailComponent {
   protected ProductSrv = inject(ProductSourceService)
 
   vat = this.VatSrv.vat
-
+  cart = this.CartSrv.cart
   product$ = this.activatedRoute.params
     .pipe(
       switchMap(params => this.ProductSrv.getProduct(params['id']))

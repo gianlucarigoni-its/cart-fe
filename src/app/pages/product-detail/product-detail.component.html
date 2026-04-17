@@ -1,6 +1,3 @@
-<div class="container-fluid mt-5 row">
-
-</div>
 <div class="container-fluid mt-5">
   <!-- torna alla lista -->
   <a class="btn btn-link" (click)="goToProductList()">torna alla lista</a>
@@ -80,9 +77,11 @@
       }
 
     </div>
-    <div class="col side-cart">
-      <app-side-cart></app-side-cart>
-    </div>
+    @if(this.cart().length){
+      <div class="col side-cart">
+        <app-side-cart></app-side-cart>
+      </div>
+    }
   </div>
 
 </div>
